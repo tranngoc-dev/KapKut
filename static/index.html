@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CapCut AI - TTS & STT Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css?v=2026081701">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="glow-container">
+        <div class="glow-element glow-1"></div>
+        <div class="glow-element glow-2"></div>
+    </div>
+
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <h1>CapCut <span class="gradient-text">AI Studio</span></h1>
+            </div>
+            <p class="subtitle">Chuyển đổi Văn bản thành Giọng nói & Nhận diện Phụ đề chính xác bằng công nghệ AI CapCut</p>
+        </header>
+
+        <main class="glass-card">
+            <!-- Tabs Navigation -->
+            <div class="tabs-nav">
+                <button class="tab-btn active" data-tab="tts-tab">
+                    <span class="tab-icon">🗣️</span> Text to Speech (TTS)
+                </button>
+                <button class="tab-btn" data-tab="dialogue-tab">
+                    <span class="tab-icon">🎭</span> Đối Thoại 2 Giọng
+                </button>
+                <button class="tab-btn" data-tab="script-tab">
+                    <span class="tab-icon">📜</span> Kịch bản → Video VO
+                </button>
+                <button class="tab-btn" data-tab="stt-tab">
+                    <span class="tab-icon">📝</span> Audio/Video → Timestamp
+                </button>
+                <button class="tab-btn" data-tab="tiktok-tab">
+                    <span class="tab-icon">🎬</span> TikTok Scraper
+                </button>
+            </div>
+
+            <!-- Tab Content: TTS -->
+            <div id="tts-tab" class="tab-content active">
+                <div class="input-group">
+                    <div class="label-with-action">
+                        <label for="tts-text">Văn bản cần đọc</label>
+                        <div class="file-upload-btn-wrapper">
+                            <input type="file" id="tts-file-input" accept=".txt,.md" style="display: none;">
+                            <button type="button" id="btn-upload-tts-file" class="btn-secondary btn-sm" title="Tải kịch bản từ file .txt hoặc .md">
+                                📂 Tải kịch bản (.txt, .md)
+                            </button>
+                        </div>
+                    </div>
+                    <textarea id="tts-text" placeholder="Nhập hoặc dán nội dung văn bản tại đây (hỗ trợ tự động chia nhỏ kịch bản dài)..." maxlength="100000"></textarea>
+                    <div class="textarea-footer">
+                        <span id="char-count">0 kí tự (tự động ghép audio nếu kịch bản dài)</span>
+                    </div>
+                </div>
+
+                <!-- Voice filters -->
+                <div class="filter-section-title">🎛️ Bộ lọc giọng đọc</div>
+                <div class="controls-row">
+                    <div class="control-group">
+                        <label for="tts-filter-lang">Ngôn ngữ</label>
+                        <div class="select-wrapper">
+                            <select id="tts-filter-lang">
+                                <option value="all" selected>Tất cả ngôn ngữ</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="tts-filter-gender">Giới tính</label>
+                        <div class="select-wrapper">
+                            <select id="tts-filter-gender">
+                                <option value="all" selected>Tất cả giới tính</option>
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                                <option value="Trẻ em">Trẻ em</option>
+                                <option value="Khác">Khác / Chưa rõ</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls-row">
+                    <div class="control-group">
+                        <label for="tts-filter-engine">Loại model / engine</label>
+                        <div class="select-wrapper">
+                            <select id="tts-filter-engine" title="Chọn họ mã giọng CapCut/SAMI">
+                                <option value="all" selected>Tất cả engine</option>
+                                <option value="BV">BV — catalog classic</option>
+                                <option value="ICL">ICL — character / persona</option>
+                                <option value="DiT">DiT — model DiT</option>
+                                <option value="Multi">Multi — đa ngôn ngữ</option>
+                                <option value="SAMI">SAMI — en_/zh_/…</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="tts-filter-search">Tìm theo tên / mã giọng</label>
+                        <input type="search" id="tts-filter-search" class="input-text" placeholder="Ví dụ: hoạt ngôn, BV074, ASMR..." autocomplete="off">
+                    </div>
+                </div>
+
+                <div id="engine-help-box" class="engine-help-box">
+                    <div class="engine-help-title">📘 Chú thích loại model</div>
+                    <p id="engine-help-active" class="engine-help-active">
+                        Chọn engine ở trên để xem mô tả, hoặc xem bảng tóm tắt bên dưới.
+                    </p>
+                    <div class="engine-legend">
+                        <div class="engine-legend-item" data-engine="BV">
+                            <span class="voice-tag tag-engine">BV</span>
+                            <div>
+                                <strong>BV (classic)</strong>
+                                <p>Giọng catalog gốc CapCut dạng <code>BV074_streaming</code>. Ổn định, đọc sạch — hợp VO/tutorial/kịch bản dài.</p>
+                            </div>
+                        </div>
+                        <div class="engine-legend-item" data-engine="ICL">
+                            <span class="voice-tag tag-engine">ICL</span>
+                            <div>
+                                <strong>ICL (character)</strong>
+                                <p>Giọng persona/avatar dạng <code>ICL_en_male_…</code>. Biểu cảm hơn, dễ lọc lang/gender — hợp shorts, storytelling.</p>
+                            </div>
+                        </div>
+                        <div class="engine-legend-item" data-engine="DiT">
+                            <span class="voice-tag tag-engine">DiT</span>
+                            <div>
+                                <strong>DiT</strong>
+                                <p>Họ mã <code>DiT_…</code> (Diffusion Transformer stack). Style/lang nằm trong tên, cùng pipeline SAMI TTS.</p>
+                            </div>
+                        </div>
+                        <div class="engine-legend-item" data-engine="Multi">
+                            <span class="voice-tag tag-engine">Multi</span>
+                            <div>
+                                <strong>Multi</strong>
+                                <p>Giọng <code>multi_…_bigtts</code> — một speaker đọc đa ngôn ngữ tốt hơn BV đơn.</p>
+                            </div>
+                        </div>
+                        <div class="engine-legend-item" data-engine="SAMI">
+                            <span class="voice-tag tag-engine">SAMI</span>
+                            <div>
+                                <strong>SAMI / lang prefix</strong>
+                                <p>Mã <code>en_male_…</code>, <code>zh_female_…</code>… không mang tiền tố BV/ICL — vẫn TTS qua platform SAMI.</p>
+                            </div>
+                        </div>
+                        <div class="engine-legend-item" data-engine="Other">
+                            <span class="voice-tag tag-engine">Other</span>
+                            <div>
+                                <strong>Other</strong>
+                                <p>Không khớp các họ trên. Nên nghe thử trước khi dùng batch.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="engine-help-note">
+                        Lưu ý: BV/ICL/DiT là <em>họ mã speaker</em> trong catalog CapCut, không phải hai API khác nhau — đều đi qua <code>sami_text_to_speech</code>.
+                    </p>
+                </div>
+
+                <div class="voice-filter-meta-row">
+                    <span id="voice-match-count" class="voice-match-count">Đang tải giọng đọc...</span>
+                    <button type="button" id="btn-reset-voice-filters" class="btn-link">Đặt lại bộ lọc</button>
+                </div>
+
+                <div class="controls-row">
+                    <div class="control-group">
+                        <label for="tts-voice">Giọng đọc (đã gắn nhãn)</label>
+                        <div class="voice-select-row">
+                            <div class="select-wrapper">
+                                <select id="tts-voice">
+                                    <option value="" disabled selected>Đang tải danh sách giọng đọc...</option>
+                                </select>
+                            </div>
+                            <button id="btn-preview-voice" class="btn-secondary" type="button" title="Nghe thử giọng này">
+                                🔊 Nghe thử
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="tts-rate-slider">Tốc độ đọc: <span id="rate-value">1.0</span>x</label>
+                        <div class="slider-container">
+                            <span class="slider-label">Chậm</span>
+                            <input type="range" id="tts-rate-slider" min="0.5" max="2.0" step="0.1" value="1.0">
+                            <span class="slider-label">Nhanh</span>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="tts-pitch-slider">Cao độ giọng (Pitch): <span id="pitch-value">0</span></label>
+                        <div class="slider-container">
+                            <span class="slider-label">Trầm</span>
+                            <input type="range" id="tts-pitch-slider" min="-12" max="12" step="1" value="0">
+                            <span class="slider-label">Bổng</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selected voice detail labels -->
+                <div id="voice-detail-card" class="voice-detail-card hidden">
+                    <div class="voice-detail-header">
+                        <div>
+                            <div class="voice-detail-title" id="voice-detail-title">—</div>
+                            <div class="voice-detail-code" id="voice-detail-code">—</div>
+                        </div>
+                        <button type="button" id="btn-preview-voice-detail" class="btn-secondary btn-sm">🔊 Nghe thử</button>
+                    </div>
+                    <div class="voice-tag-list" id="voice-tag-list"></div>
+                    <div class="voice-detail-grid">
+                        <div><span class="muted">Ngôn ngữ</span><strong id="voice-detail-lang">—</strong></div>
+                        <div><span class="muted">Giới tính</span><strong id="voice-detail-gender">—</strong></div>
+                        <div><span class="muted">Engine</span><strong id="voice-detail-engine">—</strong></div>
+                        <div><span class="muted">Resource</span><strong id="voice-detail-rid" class="mono">—</strong></div>
+                    </div>
+                    <p id="voice-detail-engine-help" class="voice-detail-engine-help hidden"></p>
+                </div>
+                <div class="controls-row checkbox-row">
+                    <div class="control-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="tts-need-timestamp">
+                            <span>Tạo kèm phụ đề & mốc thời gian (SRT)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button id="btn-generate-tts" class="btn-primary">
+                    <span class="btn-text">Tạo Giọng Nói AI</span>
+                    <span class="btn-loader hidden"></span>
+                </button>
+
+                <!-- TTS Processing Progress -->
+                <div id="tts-progress-container" class="progress-container hidden" style="margin-top: 1.5rem;">
+                    <div class="progress-label">
+                        <span id="tts-progress-status">Đang khởi tạo TTS...</span>
+                        <span id="tts-progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div id="tts-progress-bar-fill" class="progress-bar-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- TTS Result -->
+                <div id="tts-result" class="result-card hidden">
+                    <h3>🎉 Kết quả tạo giọng nói</h3>
+                    <div class="audio-container">
+                        <audio id="audio-player" controls></audio>
+                    </div>
+                    <div class="action-buttons">
+                        <a id="btn-download-audio" class="btn-secondary" href="#" target="_blank" download="capcut-tts.mp3">
+                            📥 Tải xuống Audio (MP3)
+                        </a>
+                        <a id="btn-download-srt-tts" class="btn-secondary hidden" href="#" target="_blank" download="capcut-tts.srt">
+                            📝 Tải phụ đề (.SRT)
+                        </a>
+                        <a id="btn-download-txt-tts" class="btn-secondary hidden" href="#" target="_blank" download="capcut-tts.txt">
+                            📄 Tải phụ đề (.TXT)
+                        </a>
+                    </div>
+                    <div id="tts-subtitles-container" class="hidden">
+                        <h4>📝 Phụ đề & Mốc thời gian</h4>
+                        <div class="preview-box">
+                            <pre id="tts-srt-preview"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Dialogue 2 Voices -->
+            <div id="dialogue-tab" class="tab-content">
+                <div class="input-group">
+                    <div class="label-with-action">
+                        <label for="dialogue-text">Kịch bản đối thoại 2 người</label>
+                        <div class="file-upload-btn-wrapper">
+                            <input type="file" id="dialogue-file-input" accept=".txt,.md" style="display: none;">
+                            <button type="button" id="btn-upload-dialogue-file" class="btn-secondary btn-sm" title="Tải kịch bản từ file .txt hoặc .md">
+                                📂 Tải kịch bản (.txt, .md)
+                            </button>
+                        </div>
+                    </div>
+                    <textarea id="dialogue-text" class="script-textarea" placeholder="Nhập hoặc dán kịch bản hội thoại tại đây...
+Ví dụ:
+Hùng: Chào Lan, hôm nay công việc thế nào?
+Lan: Cảm ơn Hùng, công việc của mình vẫn rất tốt!
+Hùng: Rất vui khi nghe điều đó." maxlength="100000"></textarea>
+                    <div class="textarea-footer">
+                        <span id="dialogue-char-count">0 kí tự (tự động chia lượt đối thoại)</span>
+                    </div>
+                </div>
+
+                <div id="dual-voice-config-card" class="voice-detail-card" style="margin-bottom: 20px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 16px;">
+                    <div class="engine-help-title" style="margin-bottom: 12px;">🎭 Cấu hình 2 Nhân Vật Đối Thoại</div>
+                    <p style="font-size: 0.85rem; color: var(--text-muted, #94a3b8); margin-bottom: 14px;">
+                        Nhập <strong>Tên nhân vật</strong> khớp với kịch bản (ví dụ: <code>Hùng: Chào em</code> hay <code>Lan: Em chào anh</code>). Hệ thống sẽ <strong>tự động loại bỏ tên nhân vật</strong> khi chuyển thành giọng nói.
+                    </p>
+                    
+                    <div class="controls-row" style="margin-bottom: 8px;">
+                        <div class="control-group">
+                            <label for="dual-char-1-name">Tên Nhân Vật 1</label>
+                            <input type="text" id="dual-char-1-name" class="input-text" value="Hùng" placeholder="Tên nhân vật 1 (ví dụ: Hùng)">
+                        </div>
+                        <div class="control-group">
+                            <label for="dual-char-1-lang">Ngôn ngữ NV 1</label>
+                            <div class="select-wrapper">
+                                <select id="dual-char-1-lang">
+                                    <option value="all">Tất cả ngôn ngữ</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="dual-char-1-gender">Giới tính NV 1</label>
+                            <div class="select-wrapper">
+                                <select id="dual-char-1-gender">
+                                    <option value="all">Tất cả giới tính</option>
+                                    <option value="Nam" selected>Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                    <option value="Trẻ em">Trẻ em</option>
+                                    <option value="Khác">Khác / Chưa rõ</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group" style="flex: 1.5;">
+                            <label for="dual-char-1-voice">Giọng đọc Nhân Vật 1</label>
+                            <div class="select-wrapper">
+                                <select id="dual-char-1-voice">
+                                    <option value="" disabled selected>Đang tải danh sách giọng...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="controls-row">
+                        <div class="control-group">
+                            <label for="dual-char-2-name">Tên Nhân Vật 2</label>
+                            <input type="text" id="dual-char-2-name" class="input-text" value="Lan" placeholder="Tên nhân vật 2 (ví dụ: Lan)">
+                        </div>
+                        <div class="control-group">
+                            <label for="dual-char-2-lang">Ngôn ngữ NV 2</label>
+                            <div class="select-wrapper">
+                                <select id="dual-char-2-lang">
+                                    <option value="all">Tất cả ngôn ngữ</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label for="dual-char-2-gender">Giới tính NV 2</label>
+                            <div class="select-wrapper">
+                                <select id="dual-char-2-gender">
+                                    <option value="all">Tất cả giới tính</option>
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ" selected>Nữ</option>
+                                    <option value="Trẻ em">Trẻ em</option>
+                                    <option value="Khác">Khác / Chưa rõ</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group" style="flex: 1.5;">
+                            <label for="dual-char-2-voice">Giọng đọc Nhân Vật 2</label>
+                            <div class="select-wrapper">
+                                <select id="dual-char-2-voice">
+                                    <option value="" disabled selected>Đang tải danh sách giọng...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls-row">
+                    <div class="control-group">
+                        <label for="dialogue-rate-slider">Tốc độ đọc: <span id="dialogue-rate-value">1.0</span>x</label>
+                        <div class="slider-container">
+                            <span class="slider-label">Chậm</span>
+                            <input type="range" id="dialogue-rate-slider" min="0.5" max="2.0" step="0.1" value="1.0">
+                            <span class="slider-label">Nhanh</span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="dialogue-pitch-slider">Cao độ giọng (Pitch): <span id="dialogue-pitch-value">0</span></label>
+                        <div class="slider-container">
+                            <span class="slider-label">Trầm</span>
+                            <input type="range" id="dialogue-pitch-slider" min="-12" max="12" step="1" value="0">
+                            <span class="slider-label">Bổng</span>
+                        </div>
+                    </div>
+                    <div class="control-group checkbox-group" style="margin-top: 24px;">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="dialogue-need-timestamp">
+                            <span>Tạo kèm phụ đề & mốc thời gian (SRT)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button id="btn-generate-dialogue" class="btn-primary">
+                    <span class="btn-text">Tạo Giọng Nói Đối Thoại</span>
+                    <span class="btn-loader hidden"></span>
+                </button>
+
+                <!-- Dialogue Processing Progress -->
+                <div id="dialogue-progress-container" class="progress-container hidden" style="margin-top: 1.5rem;">
+                    <div class="progress-label">
+                        <span id="dialogue-progress-status">Đang xử lý đối thoại 2 giọng...</span>
+                        <span id="dialogue-progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div id="dialogue-progress-bar-fill" class="progress-bar-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- Dialogue Result -->
+                <div id="dialogue-result" class="result-card dialogue-result-card hidden">
+                    <h3>🎉 Kết quả tạo đối thoại 2 giọng</h3>
+                    <div class="audio-container dialogue-audio-container">
+                        <audio id="dialogue-audio-player" class="dialogue-audio-element" controls></audio>
+                    </div>
+                    <div class="action-buttons">
+                        <a id="btn-download-dialogue-audio" class="btn-secondary btn-dialogue-accent" href="#" target="_blank" download="dialogue-tts.mp3">
+                            📥 Tải xuống Audio (MP3)
+                        </a>
+                        <a id="btn-download-srt-dialogue" class="btn-secondary hidden" href="#" target="_blank" download="dialogue-tts.srt">
+                            📝 Tải phụ đề (.SRT)
+                        </a>
+                        <a id="btn-download-txt-dialogue" class="btn-secondary hidden" href="#" target="_blank" download="dialogue-tts.txt">
+                            📄 Tải phụ đề (.TXT)
+                        </a>
+                    </div>
+                    <div id="dialogue-subtitles-container" class="hidden">
+                        <h4>📝 Phụ đề & Mốc thời gian</h4>
+                        <div class="preview-box">
+                            <pre id="dialogue-srt-preview"></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: Script → multi-scene TTS -->
+            <div id="script-tab" class="tab-content">
+                <p class="script-intro">
+                    Dán kịch bản → tách cảnh → TTS từng đoạn → tải ZIP
+                    (<code>segments/*.mp3 + *.srt</code>, <code>full/voiceover.mp3</code>) để ghép video.
+                </p>
+
+                <div class="controls-row">
+                    <div class="control-group">
+                        <label for="script-project-name">Tên dự án</label>
+                        <input type="text" id="script-project-name" class="input-text" placeholder="vd: review-sp-01" value="script_project">
+                    </div>
+                    <div class="control-group">
+                        <label for="script-preset-select">Preset giọng (local)</label>
+                        <div class="voice-select-row">
+                            <div class="select-wrapper">
+                                <select id="script-preset-select">
+                                    <option value="">— Chọn preset đã lưu —</option>
+                                </select>
+                            </div>
+                            <button type="button" id="btn-script-save-preset" class="btn-secondary" title="Lưu preset hiện tại">💾</button>
+                            <button type="button" id="btn-script-delete-preset" class="btn-secondary" title="Xóa preset">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="script-text">Kịch bản</label>
+                    <textarea id="script-text" class="script-textarea" placeholder="Hỗ trợ tách cảnh bằng:
+• Dòng --- hoặc ===
+• Tiêu đề Markdown # Cảnh 1
+• Đoạn văn cách nhau bằng dòng trống
+
+Ví dụ:
+# Mở đầu
+Xin chào, hôm nay mình review...
+
+---
+# Thân bài
+Tính năng nổi bật gồm..."></textarea>
+                    <div class="textarea-footer">
+                        <span id="script-char-count">0 ký tự</span>
+                    </div>
+                </div>
+
+                <div class="filter-section-title">⚙️ Cấu hình tách đoạn & giọng</div>
+                <div class="controls-row">
+                    <div class="control-group">
+                        <label for="script-split-mode">Cách tách cảnh</label>
+                        <div class="select-wrapper">
+                            <select id="script-split-mode">
+                                <option value="auto" selected>Auto (--- / # heading / đoạn)</option>
+                                <option value="separator">Chỉ --- / ===</option>
+                                <option value="heading">Markdown # heading</option>
+                                <option value="paragraph">Đoạn (dòng trống)</option>
+                                <option value="single">Một khối (không tách cảnh)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="script-max-chars">Tối đa ký tự / đoạn TTS: <span id="script-max-chars-value">400</span></label>
+                        <div class="slider-container">
+                            <span class="slider-label">150</span>
+                            <input type="range" id="script-max-chars" min="150" max="900" step="50" value="400">
+                            <span class="slider-label">900</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls-row">
+                    <div class="control-group">
+                        <label for="script-voice">Giọng đọc</label>
+                        <div class="select-wrapper">
+                            <select id="script-voice">
+                                <option value="BV074_streaming" selected>Cô Gái Hoạt Ngôn (mặc định)</option>
+                            </select>
+                        </div>
+                        <small class="helper-text">Gợi ý: <strong>BV</strong> ổn định cho VO dài · <strong>ICL</strong> persona/shorts · xem tab TTS để lọc &amp; chú thích engine.</small>
+                    </div>
+                    <div class="control-group">
+                        <label for="script-rate">Tốc độ: <span id="script-rate-value">1.0</span>x</label>
+                        <div class="slider-container">
+                            <span class="slider-label">Chậm</span>
+                            <input type="range" id="script-rate" min="0.5" max="2.0" step="0.1" value="1.0">
+                            <span class="slider-label">Nhanh</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls-row">
+                    <div class="control-group">
+                        <label for="script-gap-ms">Khoảng lặng giữa đoạn (ms): <span id="script-gap-value">300</span></label>
+                        <div class="slider-container">
+                            <span class="slider-label">0</span>
+                            <input type="range" id="script-gap-ms" min="0" max="1500" step="50" value="300">
+                            <span class="slider-label">1500</span>
+                        </div>
+                    </div>
+                    <div class="control-group checkbox-group" style="justify-content:flex-end;">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="script-need-timestamp">
+                            <span>SRT word-level (STT lại — chậm hơn)</span>
+                        </label>
+                        <small class="helper-text">Mặc định: 1 cue SRT / đoạn theo duration TTS (đủ ghép video).</small>
+                    </div>
+                </div>
+
+                <div class="button-group-row">
+                    <button id="btn-script-preview" class="btn-secondary" type="button">
+                        <span class="btn-text">👁️ Xem trước tách đoạn</span>
+                        <span class="btn-loader hidden"></span>
+                    </button>
+                    <button id="btn-script-render" class="btn-primary" type="button">
+                        <span class="btn-text">🎬 Render TTS → ZIP</span>
+                        <span class="btn-loader hidden"></span>
+                    </button>
+                </div>
+
+                <div id="script-preview-card" class="result-card hidden">
+                    <div class="result-header">
+                        <h3>📋 Xem trước đoạn</h3>
+                        <span id="script-preview-summary" class="voice-match-count"></span>
+                    </div>
+                    <div class="script-preview-list" id="script-preview-list"></div>
+                </div>
+
+                <div id="script-console-card" class="result-card hidden">
+                    <div class="result-header">
+                        <h3>💻 Tiến độ render</h3>
+                        <a id="btn-script-download" class="btn-secondary btn-sm hidden" href="#">📥 Tải ZIP dự án</a>
+                    </div>
+                    <div class="progress-label">
+                        <span id="script-progress-label">Chưa bắt đầu</span>
+                        <span id="script-progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div id="script-progress-fill" class="progress-bar-fill" style="width:0%"></div>
+                    </div>
+                    <div class="console-box" style="margin-top:1rem;">
+                        <pre id="script-console-logs"></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab Content: STT / Audio/Video → timestamp TXT -->
+            <div id="stt-tab" class="tab-content">
+                <p class="script-intro">
+                    Upload file <strong>Audio (MP3, WAV...)</strong> hoặc <strong>Video (MP4, MOV...)</strong> → CapCut STT tự động bóc tách lời thoại &amp; tạo timestamp từng câu →
+                    xuất file <code>.txt</code> hoặc <code>.srt</code>.
+                </p>
+
+                <div class="controls-row">
+                    <div class="control-group">
+                        <label for="stt-lang">Ngôn ngữ gốc trong audio</label>
+                        <div class="select-wrapper">
+                            <select id="stt-lang">
+                                <option value="auto" selected>Auto - Tự động nhận diện</option>
+                                <option value="vi-VN">Tiếng Việt (vi-VN)</option>
+                                <option value="en-US">Tiếng Anh (en-US)</option>
+                                <option value="zh-CN">Tiếng Trung (zh-CN)</option>
+                                <option value="ja-JP">Tiếng Nhật (ja-JP)</option>
+                                <option value="ko-KR">Tiếng Hàn (ko-KR)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label for="stt-txt-style">Định dạng timestamp (.txt)</label>
+                        <div class="select-wrapper">
+                            <select id="stt-txt-style">
+                                <option value="start" selected>[00:00:01.234] câu</option>
+                                <option value="range">[00:00:01.234 → 00:00:03.500] câu</option>
+                                <option value="no_timestamp">Không có timestamp (Chỉ lấy lời thoại)</option>
+                                <option value="srt_line">00:00:00,220 --&gt; 00:00:00,940 câu (SRT 1 dòng)</option>
+                                <option value="srt_block">Block SRT đầy đủ (số + time + chữ)</option>
+                                <option value="plain">00:00:01.234 câu</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls-row">
+                    <div class="control-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="stt-merge-cues" checked>
+                            <span>Gộp câu ngắn liền kề</span>
+                        </label>
+                        <small class="helper-text">
+                            Ví dụ: <em>em chỗ mua cái</em> + <em>váy này</em> →
+                            <em>em chỗ mua cái váy này</em> (áp dụng cho cả TXT và SRT)
+                        </small>
+                    </div>
+                    <div class="control-group">
+                        <label for="stt-max-gap">Khe hở tối đa để gộp: <span id="stt-max-gap-value">450</span> ms</label>
+                        <div class="slider-container">
+                            <span class="slider-label">100</span>
+                            <input type="range" id="stt-max-gap" min="100" max="1200" step="50" value="450">
+                            <span class="slider-label">1200</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drag & Drop Zone -->
+                <div id="drop-zone" class="drop-zone">
+                    <div class="drop-zone-content">
+                        <div class="drop-icon">🎬🎵</div>
+                        <p class="drop-title">Kéo &amp; thả file Audio hoặc Video vào đây</p>
+                        <p class="drop-sub">Hoặc click để chọn file từ máy tính</p>
+                        <p class="drop-hint">Hỗ trợ Audio &amp; Video: MP3, WAV, M4A, MP4, MOV, AVI, MKV, WEBM (tối đa 200MB)</p>
+                        <input type="file" id="file-input" accept="audio/*,video/*,.mp3,.wav,.m4a,.mp4,.mov,.avi,.mkv,.webm" hidden>
+                    </div>
+                </div>
+
+                <!-- Selected File Display -->
+                <div id="selected-file-info" class="selected-file-info hidden">
+                    <div class="file-details">
+                        <span class="file-icon">📄</span>
+                        <div class="file-meta">
+                            <p id="file-name" class="file-name"></p>
+                            <p id="file-size" class="file-size"></p>
+                        </div>
+                    </div>
+                    <button id="btn-remove-file" class="btn-icon">✖</button>
+                </div>
+
+                <button id="btn-transcribe" class="btn-primary" disabled>
+                    <span class="btn-text">🎬🎵 Tạo timestamp từ Audio / Video</span>
+                    <span class="btn-loader hidden"></span>
+                </button>
+
+                <!-- Processing Progress -->
+                <div id="stt-progress-container" class="progress-container hidden">
+                    <div class="progress-label">
+                        <span id="progress-status">Đang tải file lên CapCut...</span>
+                        <span id="progress-percent">0%</span>
+                    </div>
+                    <div class="progress-bar-bg">
+                        <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <!-- STT Result -->
+                <div id="stt-result" class="result-card hidden">
+                    <div class="result-header">
+                        <h3>📝 Transcript có timestamp</h3>
+                        <div class="stt-download-actions">
+                            <button id="btn-download-txt" class="btn-secondary btn-sm" type="button">
+                                📥 Tải .TXT (timestamp)
+                            </button>
+                            <button id="btn-download-srt" class="btn-secondary btn-sm" type="button">
+                                📥 Tải .SRT
+                            </button>
+                        </div>
+                    </div>
+                    <p id="stt-result-summary" class="voice-match-count" style="margin-bottom:0.75rem;"></p>
+                    <div class="srt-preview-container">
+                        <pre id="srt-preview"></pre>
+                    </div>
+                    <details class="stt-srt-details">
+                        <summary>Xem bản SRT (phụ đề)</summary>
+                        <div class="srt-preview-container" style="margin-top:0.5rem;">
+                            <pre id="srt-preview-alt"></pre>
+                        </div>
+                    </details>
+                </div>
+            </div>
+
+            <!-- Tab Content: TikTok Scraper -->
+            <div id="tiktok-tab" class="tab-content">
+                <div class="input-group">
+                    <label for="tiktok-url">Đường dẫn Kênh / Danh sách phát / Video TikTok</label>
+                    <div class="input-with-button-row">
+                        <input type="url" id="tiktok-url" placeholder="Ví dụ: https://www.tiktok.com/@longtruyenthong" class="input-text">
+                        <button id="btn-scan-playlists" class="btn-secondary" type="button">
+                            <span class="btn-text">🔍 Quét danh sách phát</span>
+                            <span class="btn-loader hidden"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Playlist Selector Dropdown (Hidden by default, shown after scanning) -->
+                <div class="input-group hidden" id="tiktok-playlists-dropdown-container">
+                    <label for="tiktok-playlists-dropdown">Chọn danh sách phát có trên kênh</label>
+                    <div class="select-wrapper">
+                        <select id="tiktok-playlists-dropdown">
+                            <option value="">-- Chọn danh sách phát --</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="controls-row">
+                    <div class="control-group">
+                        <label for="tiktok-lang">Ngôn ngữ thoại trong video</label>
+                        <div class="select-wrapper">
+                            <select id="tiktok-lang">
+                                <option value="auto" selected>Auto - Tự động nhận diện</option>
+                                <option value="vi-VN">Tiếng Việt (vi-VN)</option>
+                                <option value="en-US">Tiếng Anh (en-US)</option>
+                                <option value="zh-CN">Tiếng Trung (zh-CN)</option>
+                                <option value="ja-JP">Tiếng Nhật (ja-JP)</option>
+                                <option value="ko-KR">Tiếng Hàn (ko-KR)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="tiktok-limit-mode">Chế độ tải video</label>
+                        <div class="select-wrapper">
+                            <select id="tiktok-limit-mode">
+                                <option value="latest" selected>Tải N video gần nhất</option>
+                                <option value="all">Tải tất cả video trong kênh</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls-row" id="tiktok-slider-row">
+                    <div class="control-group full-width">
+                        <label for="tiktok-limit">Số lượng video tải (1 - 50): <span id="tiktok-limit-value">5</span> video gần nhất</label>
+                        <div class="slider-container">
+                            <span class="slider-label">1</span>
+                            <input type="range" id="tiktok-limit" min="1" max="50" step="1" value="5">
+                            <span class="slider-label">50</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Filters Section -->
+                <div class="filter-section-title">⚡ Bộ lọc video nâng cao (Không bắt buộc)</div>
+                <div class="controls-row">
+                    <div class="control-group full-width">
+                        <label for="tiktok-playlist-url">Danh sách phát (URL Playlist/Collection)</label>
+                        <input type="url" id="tiktok-playlist-url" placeholder="Ví dụ: https://www.tiktok.com/@longtruyenthong/playlist/Khung-hoang-7212175960010901509" class="input-text">
+                        <small class="helper-text">Nếu nhập, hệ thống sẽ chỉ lấy các video trong danh sách phát này.</small>
+                    </div>
+                </div>
+                <div class="controls-row filter-grid">
+                    <div class="control-group">
+                        <label for="tiktok-min-views">Lượt xem tối thiểu</label>
+                        <input type="number" id="tiktok-min-views" placeholder="Ví dụ: 10000" min="0" class="input-text">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="tiktok-min-likes">Lượt thích tối thiểu</label>
+                        <input type="number" id="tiktok-min-likes" placeholder="Ví dụ: 500" min="0" class="input-text">
+                    </div>
+                </div>
+
+                <div class="controls-row filter-grid">
+                    <div class="control-group">
+                        <label for="tiktok-min-duration">Độ dài tối thiểu (giây)</label>
+                        <input type="number" id="tiktok-min-duration" placeholder="Ví dụ: 15" min="0" class="input-text">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="tiktok-max-duration">Độ dài tối đa (giây)</label>
+                        <input type="number" id="tiktok-max-duration" placeholder="Ví dụ: 300" min="0" class="input-text">
+                    </div>
+                </div>
+
+                <div class="button-group-row">
+                    <button id="btn-start-scraper" class="btn-primary">
+                        <span class="btn-text">Bắt đầu cào & Trích kịch bản</span>
+                        <span class="btn-loader hidden"></span>
+                    </button>
+                    <button id="btn-export-csv" class="btn-secondary">
+                        <span class="btn-text">Xuất danh sách (.csv)</span>
+                        <span class="btn-loader hidden"></span>
+                    </button>
+                </div>
+
+                <!-- Scraper Terminal Console -->
+                <div id="tiktok-console-card" class="result-card hidden">
+                    <div class="result-header">
+                        <h3>💻 Tiến độ xử lý kênh</h3>
+                        <a id="btn-download-zip" class="btn-secondary btn-sm hidden" href="#">
+                            📥 Tải File ZIP Kịch Bản (.zip)
+                        </a>
+                    </div>
+                    <div class="console-box">
+                        <pre id="console-logs"></pre>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Phát triển bởi 🚀 <a href="https://zalo.me/0913318313" target="_blank" rel="noopener noreferrer" class="footer-link">Vũ Trọng - 0913.318.313</a></p>
+        </footer>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="/static/app.js?v=2026081701"></script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+.env
+.env.*
+
+# Local device / secrets (keep example if present)
+device.json
+*.pem
+*.p12
+
+# CapCut capture dumps & debug artifacts (large / ephemeral)
+captured_voices*.json
+captured_voices_cache_*.json
+Voice.bak_*.json
+mix_response_*.json
+playlist_rehydration.json
+playlist_screenshot.png
+playlist_scroll_debug.png
+tools/healthcheck_result.json
+
+# IDE / agent index caches
+.gitnexus/
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Runtime outputs
+*.zip
+tmp/
+temp/
+.cache/
+
+static/downloads/*.mp3

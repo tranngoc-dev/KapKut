@@ -1,0 +1,107 @@
+{
+  "updated_at": "2026-09-23T16:28:00Z",
+  "summary": {
+    "project": "CapCut AI Studio (TTS & STT)",
+    "status": "completed",
+    "phase": "TTS Voice Formatting & Packaging",
+    "progress_percent": 100,
+    "next_step": "(none)",
+    "blockers_count": 0
+  },
+  "working_on": {
+    "feature": "TTS Voices Dropdown & Footer Link & EXE Packaging",
+    "task": "Completed all requested features",
+    "status": "done",
+    "files": [
+      "server.py",
+      "static/app.js",
+      "static/index.html",
+      "static/style.css",
+      "dist/CapCut_AI_Studio/CapCut_AI_Studio.exe"
+    ],
+    "blockers": [],
+    "notes": "TTS dropdown displays [display_name] - [voice_type] | [lang]. Footer updated to Vu Trong with Zalo hyperlink. Packaged with PyInstaller."
+  },
+  "pending_tasks": [],
+  "recent_changes": [
+    {
+      "timestamp": "2026-09-23T15:49:00Z",
+      "type": "feature",
+      "description": "Updated TTS dropdown format to display_name - voice_type | lang (removed resource_id)",
+      "files": ["server.py", "static/app.js"]
+    },
+    {
+      "timestamp": "2026-09-23T16:24:00Z",
+      "type": "feature",
+      "description": "Updated footer to Vu Trong - 0913.318.313 with Zalo hyperlink and rebuilt CapCut_AI_Studio.exe",
+      "files": ["static/index.html", "static/style.css", "dist/CapCut_AI_Studio/CapCut_AI_Studio.exe"]
+    }
+  ],
+  "errors_encountered": [
+    {
+      "error": "ModuleNotFoundError: No module named 'webview' when running app_gui.py",
+      "solution": "Installed pywebview package into Python environment",
+      "resolved": true
+    }
+  ],
+  "release": {
+    "live_test_approved": true
+  },
+  "decisions_made": [
+    {
+      "decision": "Dropdown label format: [display_name] - [voice_type] | [lang]",
+      "reason": "Explicit user preference without resource_id"
+    },
+    {
+      "decision": "Use PyInstaller with CapCut_AI_Studio.spec for standalone EXE",
+      "reason": "User requested executable distribution"
+    }
+  ],
+  "context_checkpoints": [
+    {
+      "timestamp": "2026-09-23T16:28:00Z",
+      "trigger": "save_brain",
+      "message_count": 8,
+      "summary": "Completed TTS voice dropdown formatting, footer update, and EXE packaging",
+      "compaction": {
+        "primary_intent": "Format CapCut TTS voice dropdown and package standalone EXE with custom footer",
+        "key_concepts": ["CapCut TTS voices", "voice_type", "display_name", "pywebview", "PyInstaller packaging"],
+        "files_and_code": [
+          {
+            "path": "server.py",
+            "note": "enrich_voice_item formats option_label = f'{display_name} - {voice_type} | {lang}'"
+          },
+          {
+            "path": "static/app.js",
+            "note": "renderFilteredVoices renders option_label and supports comprehensive search"
+          },
+          {
+            "path": "static/index.html",
+            "note": "Footer updated with Vu Trong - 0913.318.313 linking to https://zalo.me/0913318313"
+          },
+          {
+            "path": "static/style.css",
+            "note": "Added .footer-link style with accent color and hover effect"
+          },
+          {
+            "path": "dist/CapCut_AI_Studio/CapCut_AI_Studio.exe",
+            "note": "Standalone executable 73.2MB built via PyInstaller"
+          }
+        ],
+        "errors_and_fixes": [
+          {
+            "error": "Missing pywebview in Python runtime",
+            "fix": "Installed pywebview wheel in environment"
+          }
+        ],
+        "pending_jobs": [],
+        "current_work": "Completed TTS voice dropdown formatting, footer update, and EXE packaging",
+        "next_step": "(none)",
+        "critical_context": [
+          "Do not show resource_id in dropdown",
+          "Dist executable located at dist/CapCut_AI_Studio/CapCut_AI_Studio.exe"
+        ]
+      }
+    }
+  ]
+}

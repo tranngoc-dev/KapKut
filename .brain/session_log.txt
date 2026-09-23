@@ -1,0 +1,8 @@
+[2026-09-23T22:45:00+07:00] MILESTONE: Intake & Gap Analysis - User requested dropdown format with CapCut source information.
+[2026-09-23T22:46:00+07:00] MILESTONE: User approved format: [display_name] - [voice_type] | [lang] (no resource_id).
+[2026-09-23T22:49:00+07:00] MILESTONE: Subagent a11y-architect updated server.py & static/app.js. Verified 919 voices with exact format.
+[2026-09-23T22:58:00+07:00] MILESTONE: Installed pywebview and launched live app test on port 8123.
+[2026-09-23T23:17:00+07:00] MILESTONE: User approved plan to update footer to "Vũ Trọng - 0913.318.313" (Zalo link) and build EXE.
+[2026-09-23T23:24:00+07:00] MILESTONE: Subagent a11y-architect updated static/index.html, static/style.css, and executed PyInstaller build.
+[2026-09-23T23:25:00+07:00] MILESTONE: Verification passed - dist/CapCut_AI_Studio/CapCut_AI_Studio.exe (73.2 MB) verified.
+[2026-09-23T23:28:00+07:00] MILESTONE: Executed save-brain workflow - eternal checkpoint created.
