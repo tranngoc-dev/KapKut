@@ -1,14 +1,14 @@
 # STATE.md — Project Autonomous Health & Status
 
-> *Bảng trạng thái sống do Agent Điều Phối (Autonomous Orchestrator) tự động duy trì. Cập nhật lần cuối: 2026-09-23 23:41:30 (GMT+7)*
+> *Bảng trạng thái sống do Agent Điều Phối (Autonomous Orchestrator) tự động duy trì. Cập nhật lần cuối: 2026-09-29 00:24:00 (GMT+7)*
 
 ---
 
 ## 🚦 Current Focus & In-Flight Work
-- **Active Task:** Đẩy toàn bộ mã nguồn dự án lên GitHub `tranngoc-dev/KapKut`
-- **Assigned Subagents:** Controller & `a11y-architect`
-- **Branch / Worktree:** `main` (Synced với `origin/main`)
-- **Progress:** [100%] — Dự án đã được push thành công lên GitHub repository.
+- **Active Task:** Thu thập hiệu ứng chuyển cảnh (Transitions) và hiệu ứng ảnh/video (Animations & Effects) từ CapCut PC về repo
+- **Assigned Subagents:** Controller
+- **Branch / Worktree:** `main`
+- **Progress:** [100%] — Đã thu thập và trích xuất thành công toàn bộ kho hiệu ứng chuyển cảnh (850 transitions), hiệu ứng động ảnh/clip (348 animations), hiệu ứng video (4,049 effects) và hiệu ứng ảnh (341 photo effects).
 
 ---
 
@@ -18,16 +18,22 @@
 ---
 
 ## 🧪 Verification & Health Checks
-- **Remote Git Status:** Pushed `11612f9` -> `origin/main` (`https://github.com/tranngoc-dev/KapKut`)
-- **Remote URL Hygiene:** Clean URL restored (Token sanitized from `.git/config`)
-- **Scope Audit:** 45 files committed & tracked.
+- **Datasets Collected:**
+  - `Transitions.json`: 850 hiệu ứng chuyển cảnh
+  - `Animations.json`: 348 hiệu ứng động cho ảnh/clip
+  - `Photo_Effects.json`: 341 hiệu ứng ảnh (AI Painting, Image style)
+  - `Video_Effects.json`: 4,049 hiệu ứng video
+- **Tools Created:**
+  - `tools/export_all_effects_from_cache.py`: Script trích xuất tự động từ SQLite cache
+  - `tools/watch_and_export_effects.py`: Script live watcher theo dõi cập nhật cache thời gian thực
 
 ---
 
 ## 📝 Recent Activity & Commits
-- `11612f9` — `feat: CapCut TTS & STT Studio - updated TTS dropdown format and custom footer`
+- `b641181` — `docs: update session log and STATE after removing README`
+- Trích xuất thành công 850 Chuyển cảnh (`Transitions.json`) và 348 Hiệu ứng ảnh (`Animations.json`)
 
 ---
 
 ## 📋 Autonomous Next Backlog
-1. (none)
+1. Commit & Push toàn bộ các kho hiệu ứng mới lên GitHub (nếu Sếp yêu cầu)

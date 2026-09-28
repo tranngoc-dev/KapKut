@@ -8,3 +8,4 @@
 [2026-09-23T23:28:00+07:00] MILESTONE: Executed save-brain workflow - eternal checkpoint created.
 [2026-09-23T23:41:00+07:00] MILESTONE: Pushed repository to https://github.com/tranngoc-dev/KapKut main branch successfully.
 [2026-09-23T23:43:00+07:00] MILESTONE: Removed README.md and pushed commit 3809d0b to GitHub.
+[2026-09-29T00:24:00+07:00] MILESTONE: Successfully captured 850 transitions into Transitions.json, 348 animations into Animations.json, 341 photo effects into Photo_Effects.json, and 4049 video effects into Video_Effects.json from live CapCut PC cache.
